@@ -8,13 +8,18 @@ RUN apt-get update \
     && apt-get install -y gcc default-libmysqlclient-dev pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
-
 # Install app dependencies
 RUN pip install mysqlclient
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app/backend
 
+# Run migrations (optional, uncomment if needed)
+# RUN python manage.py migrate
+# RUN python manage.py makemigrations
+
+# Expose the port the app runs on
 EXPOSE 8000
-#RUN python manage.py migrate
-#RUN python manage.py makemigrations
+
+# Command to run the application
+CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
